@@ -1,0 +1,77 @@
+plugins {
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.android.application
+}
+
+android {
+    namespace 'com.github.rwsbillyang.composeui.example'
+    compileSdk libs.versions.compileSdkVersion.get().toInteger() //kts: toInt()
+
+    defaultConfig {
+        applicationId "com.github.rwsbillyang.composeui.example"
+        minSdk 21
+        targetSdk libs.versions.targetSdkVersion.get().toInteger() //kts: toInt()
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeVersion.get()
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.compose.runtime
+    implementation libs.androidx.compose.foundation
+
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.compose.foundation
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.compose.material3
+    implementation libs.androidx.compose.material3.window.sizeclass
+    //implementation libs.androidx.compose.material
+    implementation libs.androidx.activity.compose //RoutableActivity
+
+
+    debugImplementation libs.androidx.compose.ui.tooling
+    debugImplementation libs.androidx.compose.ui.test.manifest
+    androidTestImplementation libs.androidx.compose.ui.test.junit4
+
+    testImplementation libs.junit.junit
+    androidTestImplementation libs.androidx.test.ext
+    androidTestImplementation libs.androidx.test.espresso
+
+    implementation libs.composerouter
+
+    implementation project(path: ':lib')
+
+}

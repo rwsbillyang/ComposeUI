@@ -1,0 +1,76 @@
+plugins {
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.android.library
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.github.rwsbillyang.composeui'
+    compileSdk libs.versions.compileSdkVersion.get().toInteger() //kts: toInt()
+
+    defaultConfig {
+        minSdk 26
+        targetSdk libs.versions.targetSdkVersion.get().toInteger() //kts: toInt()
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.composeVersion.get()
+    }
+}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.compose.runtime
+    implementation libs.androidx.compose.foundation
+
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.material3 //
+  //  compileOnly libs.androidx.compose.material3.window.sizeclass
+    implementation libs.androidx.compose.material.icons.extended //https://github.com/adrielcafe/bonsai/issues/4
+
+}
+
+
+
+// gradle build or gradle assembleRelease
+// gradle publishToMavenLocal
+//https://developer.android.google.cn/studio/build/maven-publish-plugin?hl=zh-cn
+afterEvaluate {
+    publishing {
+        // 配置maven 仓库
+        repositories { RepositoryHandler handler ->
+            handler.mavenLocal()
+        }
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = "com.github.rwsbillyang"
+                artifactId = "composeui"
+                version = libs.versions.composeuiVersion.get()
+            }
+        }
+    }
+}
