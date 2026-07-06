@@ -2,6 +2,7 @@ package com.github.rwsbillyang.composeui.example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -12,8 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,9 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.compose.ui.unit.dp
 import com.github.rwsbillyang.composerouter.*
+import com.github.rwsbillyang.composerouter.icons.IconSettings
 import com.github.rwsbillyang.composerouter.nav.FlowEventBus
 import com.github.rwsbillyang.composerouter.nav.ItemsNav
 import com.github.rwsbillyang.composerouter.nav.NavScaffold3
@@ -62,7 +63,7 @@ class MainActivity : RoutableActivity() { // or use LocalRoutableActivity: route
                 val router = useRouter()
                 Spacer(Modifier.width(8.dp))
                 IconButton(onClick = { router.navByName("Settings") }) {
-                    Icon(Icons.Rounded.Settings, contentDescription = "Settings")
+                    Icon(IconSettings, contentDescription = "Settings")
                 }
             }
         )),
@@ -137,7 +138,7 @@ fun Screen1(call: ScreenCall) {
 @Composable
 fun Screen2(call: ScreenCall) {
     var itemPair by remember {  mutableStateOf<Pair<Int, String>?>(null) }
-    val ctx = LocalContext.current as ComponentActivity
+    val ctx = LocalActivity.current as ComponentActivity
     LaunchedEffect(Unit){
         FlowEventBus.subscribe<Pair<Int, String>>(ctx.lifecycle, "onItemClick"){
             itemPair = it
